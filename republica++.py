@@ -20,13 +20,15 @@ def main():
     tela_tarefa = TelaTarefa()
 
     # Cadastro inicial (simulado)
-    ctrl_moradores.cadastrarMorador({"nome": "João", "email": "joao@email.com"})
-    ctrl_moradores.cadastrarMorador({"nome": "Maria", "email": "maria@email.com"})
-    ctrl_moradores.cadastrarMorador({"nome": "Pedro", "email": "pedro@email.com"})
+    ctrl_moradores.cadastrarMorador({"nome": "Hermano", "email": "hermano@email.com"})
+    ctrl_moradores.cadastrarMorador({"nome": "Cecilia", "email": "cecilia@email.com"})
+    ctrl_moradores.cadastrarMorador({"nome": "Jean", "email": "jean@email.com"})
+    ctrl_moradores.cadastrarMorador({"nome": "Vinicius", "email": "vinicius@email.com"})
 
     # Despesas
-    ctrl_despesas.adicionarDespesa("Carne para churrasco", 200.0)
-    ctrl_despesas.adicionarDespesa("Carvão", 30.0)
+    ctrl_despesas.adicionarDespesa("Hamburgada", 100.0)
+    ctrl_despesas.adicionarDespesa("Luz", 300.0)
+    ctrl_despesas.adicionarDespesa("Internet", 100.0)
 
     tela_despesa.mostrarRateio(ctrl_despesas.gerarRelatorioDeRateio())
 
