@@ -1,14 +1,20 @@
 class Tarefa:
-    def __init__(self, id: int, descricao: str, concluida: bool = False):
-        self.id = id
-        self.descricao = descricao
-        self.concluida = concluida
-        self.responsavel = None
+    def __init__(self, descricao: str):
+        self.__descricao = descricao
+        self.__concluida = False
 
-    def registrarTarefa(self) -> None:
-        print(f"[Tarefa] '{self.descricao}' registrada.")
+    @property
+    def descricao(self):
+        return self.__descricao
 
-    def alterarStatus(self) -> None:
-        self.concluida = not self.concluida
-        status = "concluída" if self.concluida else "pendente"
-        print(f"[Tarefa] '{self.descricao}' agora está {status}.")
+    @property
+    def concluida(self):
+        return self.__concluida
+
+    @descricao.setter
+    def descricao(self, descricao: str):
+        self.__descricao = descricao
+
+    def alterar_status(self):
+        self.__concluida = not self.__concluida
+        return self.__concluida

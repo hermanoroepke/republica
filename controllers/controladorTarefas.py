@@ -1,31 +1,69 @@
-from models import Tarefa
+from views.telaTarefa import TelaTarefa
+from models.tarefa import Tarefa
+
 
 class ControladorTarefas:
-    def __init__(self, controlador_moradores):
-        self.tarefas = []
-        self.controlador_moradores = controlador_moradores
-        self._proximo_id = 1
 
-    def criarTarefa(self, descricao: str) -> Tarefa:
-        tarefa = Tarefa(self._proximo_id, descricao)
-        self.tarefas.append(tarefa)
-        self._proximo_id += 1
-        tarefa.registrarTarefa()
-        return tarefa
+    def __init__(self, controlador_sistema):
+        self.__tarefas = []
+        self.__tela_tarefa = TelaTarefa()
+        self.__controlador_sistema = controlador_sistema
 
-    def atribuirTarefa(self, idMorador: int, idTarefa: int, dataRealizacao) -> None:
-        morador = self.controlador_moradores.buscarPorId(idMorador)
-        tarefa = self._buscarTarefa(idTarefa)
-        if not morador or not tarefa:
-            print("[Erro] Morador ou tarefa não encontrado.")
+    def pega_tarefa_por_descricao(self, descricao: str):
+        for tarefa in self.__tarefas:
+            if tarefa.descricao == descricao:
+                return tarefa
+        return None
+
+    def incluir_tarefa(self):
+        dados = self.__tela_tarefa.pega_dados_tarefa()
+        tarefa = Tarefa(dados["descricao"])
+        self.__tarefas.append(tarefa)
+        self.__tela_tarefa.mostra_mensagem("Tarefa registrada!")
+
+    def lista_tarefas(self):
+        if not self.__tarefas:
+            self.__tela_tarefa.mostra_mensagem("Nenhuma tarefa registrada.")
             return
-        tarefa.responsavel = morador
-        print(f"[Tarefa] '{tarefa.descricao}' atribuída a {morador.getNome()} para {dataRealizacao}.")
+        for tarefa in self.__tarefas:
+            self.__tela_tarefa.mostra_tarefa({
+                "descricao": tarefa.descricao,
+                "concluida": tarefa.concluida
+            })
 
-    def marcarComoConcluida(self, idTarefa: int) -> None:
-        tarefa = self._buscarTarefa(idTarefa)
-        if tarefa:
-            tarefa.alterarStatus()
+    def alterar_status_tarefa(self):
+        self.lista_tarefas()
+        descricao = self.__tela_tarefa.seleciona_tarefa()
+        tarefa = self.pega_tarefa_por_descricao(descricao)
 
-    def _buscarTarefa(self, idTarefa: int):
-        return next((t for t in self.tarefas if t.id == idTarefa), None)
+        if tarefa is not None:
+            tarefa.alterar_status()
+            self.lista_tarefas()
+        else:
+            self.__tela_tarefa.mostra_mensagem("ATENCAO: Tarefa não existente")
+
+    def excluir_tarefa(self):
+        self.lista_tarefas()
+        descricao = self.__tela_tarefa.seleciona_tarefa()
+        tarefa = self.pega_tarefa_por_descricao(descricao)
+
+        if tarefa is not None:
+            self.__tarefas.remove(tarefa)
+            self.lista_tarefas()
+        else:
+            self.__tela_tarefa.mostra_mensagem("ATENCAO: Tarefa não existente")
+
+    def retornar(self):
+        self.__controlador_sistema.abre_tela()
+
+    def abre_tela(self):
+        lista_opcoes = {
+            1: self.incluir_tarefa,
+            2: self.lista_tarefas,
+            3: self.alterar_status_tarefa,
+            4: self.excluir_tarefa,
+            0: self.retornar
+        }
+        continua = True
+        while continua:
+            lista_opcoes[self.__tela_tarefa.tela_opcoes()]()

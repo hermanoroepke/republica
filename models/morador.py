@@ -1,18 +1,38 @@
 class Morador:
-    def __init__(self, id: int, nome: str, email: str, saldo_devedor: float = 0.0):
-        self.id = id
-        self.nome = nome
-        self.email = email
-        self.saldoDevedor = saldo_devedor
+    def __init__(self, nome: str, email: str, cpf: str):
+        self.__nome = nome
+        self.__email = email
+        self.__cpf = cpf
+        self.__saldo_devedor = 0.0
 
-    def registrarMorador(self) -> None:
-        print(f"[Morador] {self.nome} registrado com sucesso.")
+    @property
+    def nome(self):
+        return self.__nome
 
-    def getNome(self) -> str:
-        return self.nome
+    @property
+    def email(self):
+        return self.__email
 
-    def atualizarSaldo(self, valor: float) -> None:
-        self.saldoDevedor += valor
+    @property
+    def cpf(self):
+        return self.__cpf
 
-    def __repr__(self):
-        return f"Morador(id={self.id}, nome='{self.nome}', saldo={self.saldoDevedor:.2f})"
+    @property
+    def saldo_devedor(self):
+        return self.__saldo_devedor
+
+    @nome.setter
+    def nome(self, nome: str):
+        self.__nome = nome
+
+    @email.setter
+    def email(self, email: str):
+        self.__email = email
+
+    @cpf.setter
+    def cpf(self, cpf: str):
+        self.__cpf = cpf
+
+    def atualizar_saldo(self, valor: float):
+        self.__saldo_devedor += valor
+        return self.__saldo_devedor
